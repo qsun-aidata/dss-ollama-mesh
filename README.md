@@ -9,7 +9,7 @@ concurrency limit and bounded retry on transient errors.
 
 
 
-![dss-ollama-mesh dss-ollama-mesh](docs/dss-ollama-mesh.png)
+![dss-ollama-mesh](docs/dss-ollama-mesh.png)
 
 **Author:** Qian SUN · [contact@qsun.fr](mailto:contact@qsun.fr)  
 **License:** [Apache 2.0](LICENSE)
