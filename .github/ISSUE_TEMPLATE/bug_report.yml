@@ -1,0 +1,57 @@
+name: Bug report
+description: Something in the plugin does not behave as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not paste API keys, prompt content, or DSS log excerpts that
+        contain either.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you got instead.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: capability
+    attributes:
+      label: Which capability
+      options:
+        - Chat completion (OllamaLLM)
+        - Text embedding (OllamaEmbeddingModel)
+        - Both / not sure
+    validations:
+      required: true
+
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Plugin, DSS, Ollama, and the openai package in the code env.
+      placeholder: "plugin 0.1.0, DSS 14.1, Ollama 0.6.2, openai 1.99.1"
+    validations:
+      required: true
+
+  - type: input
+    id: model
+    attributes:
+      label: Model
+      placeholder: "llama3.1:8b"
+
+  - type: dropdown
+    id: streaming
+    attributes:
+      label: Is streaming enabled on the connection?
+      options: ["Yes", "No", "Fails either way"]
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant DSS log output
+      description: >
+        The traceback, if there is one. Scrub anything sensitive first.
+      render: text

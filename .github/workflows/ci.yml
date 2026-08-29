@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install 'ruff>=0.5,<1.0'
+      - run: ruff check .
+
+  test:
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Cover the floor and every interpreter advertised in desc.json.
+        include:
+          - {python-version: "3.8", runs-on: ubuntu-22.04}
+          - {python-version: "3.11", runs-on: ubuntu-latest}
+          - {python-version: "3.12", runs-on: ubuntu-latest}
+          - {python-version: "3.13", runs-on: ubuntu-latest}
+          - {python-version: "3.14", runs-on: ubuntu-latest}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dev dependencies
+        # openai is needed for tests/test_client.py; the rest of the suite runs
+        # without it, thanks to the lazy imports in dssollamamesh/__init__.py.
+        run: pip install -r requirements-dev.txt
+
+      - name: Compile plugin Python modules
+        run: |
+          python -m py_compile python-lib/dssollamamesh/*.py
+          python -m py_compile python-llms/ollama-mesh/llm.py
+
+      - name: Run unit tests
+        # pyproject.toml sets pythonpath, so no PYTHONPATH needed here.
+        run: pytest -q tests/
+
+  release:
+    needs: [lint, test]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Verify tag matches plugin version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          version=$(python3 -c 'import json; print(json.load(open("plugin.json"))["version"])')
+          test "${RELEASE_TAG#v}" = "$version"
+      - name: Build plugin zip
+        run: ./scripts/build-plugin-zip.sh "$GITHUB_REF_NAME"
+      - name: Create GitHub release and attach the zip
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/*.zip --verify-tag --generate-notes

@@ -1,0 +1,26 @@
+# The plugin is not a pip package — DSS loads it from the plugin folder, and its
+# one runtime dependency is declared in code-env/python/spec/requirements.txt.
+# This file exists so a fresh clone can run `pytest` and `ruff` with no setup:
+# the pythonpath below replaces the PYTHONPATH=python-lib the suite used to
+# require from whoever invoked it.
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+pythonpath = ["python-lib"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+# The floor advertised in code-env/python/desc.json.
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B"]
+
+[tool.ruff.lint.isort]
+# Lives under python-lib/, so ruff cannot infer it from the layout.
+known-first-party = ["dssollamamesh"]
+
+[tool.ruff.lint.per-file-ignores]
+# openai is loaded via pytest.importorskip, so these imports must follow it.
+"tests/test_client.py" = ["E402"]

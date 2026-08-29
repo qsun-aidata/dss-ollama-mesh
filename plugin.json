@@ -1,0 +1,15 @@
+{
+    "id": "dss-ollama-mesh",
+    "version": "0.1.0",
+    "meta": {
+        "label": "Ollama for Dataiku LLM Mesh",
+        "description": "Connect Dataiku LLM Mesh to Ollama via its OpenAI-compatible API — streaming chat, tool calling, and text embeddings.",
+        "author": "Qian SUN",
+        "provider": "Qian SUN",
+        "icon": "fas fa-magic",
+        "recipesCategory": "genai",
+        "tags": ["GenAI", "LLM", "Ollama"],
+        "url": "https://github.com/qsun-aidata/dss-ollama-mesh",
+        "licenseInfo": "Apache Software License"
+    }
+}
