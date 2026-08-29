@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.coverage
+.htmlcov
+
+# Build output
+/dist/
+*.zip
+
+# Editors and OS
+.idea
+.DS_Store
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local tooling scratch: DSS sync state and the diagram profile marker.
+# Not used by the plugin — safe to delete.
+.journal
+.mainlock
+.wlock
+.ts
+.dss-meta
+.diagram-design

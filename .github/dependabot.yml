@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+
+  # Dev tooling only. The plugin's runtime requirement lives in
+  # code-env/python/spec/requirements.txt and is deliberately a wide floor, so
+  # that DSS can resolve a version matching whichever interpreter the code env
+  # was built with.
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: monthly
+
+  - package-ecosystem: pip
+    directory: "/code-env/python/spec"
+    schedule:
+      interval: monthly

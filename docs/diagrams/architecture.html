@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ollama for Dataiku LLM Mesh · Architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper: #F0F3F3;
+      --color-ink: #12211D;
+      --color-muted: #4F6C61;
+      --color-soft: #698277;
+      --color-accent: #12211D;
+      --color-accent-tint: #00D3E0;
+      --color-link: #12211D;
+      --font-sans: 'Archivo', 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif;
+      --font-mono: 'Space Mono', 'SF Mono', Menlo, Consolas, 'PingFang SC', monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-sans);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 1.75rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · QSUN</p>
+    <h1>Ollama for Dataiku LLM Mesh</h1>
+    <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg" role="img"
+         aria-labelledby="ollama-arch-title ollama-arch-desc">
+      <title id="ollama-arch-title">Ollama for Dataiku LLM Mesh</title>
+      <desc id="ollama-arch-desc">Dataiku LLM Mesh routes chat and embedding requests through the dss-ollama-mesh plugin to an Ollama OpenAI-compatible endpoint.</desc>
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#4F6C61"/>
+        </marker>
+        <marker id="arrow-ink" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#12211D"/>
+        </marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#12211D"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#F0F3F3"/>
+
+      <!-- Zone: Dataiku -->
+      <rect x="24" y="108" width="312" height="200" rx="8"
+            fill="rgba(18,33,29,0.02)" stroke="rgba(18,33,29,0.10)" stroke-width="0.8"/>
+      <rect x="80" y="112" width="56" height="12" rx="2" fill="#F0F3F3"/>
+      <text x="108" y="121" fill="rgba(18,33,29,0.40)" font-size="7"
+            font-family="'Space Mono', 'SF Mono', Menlo, Consolas, monospace"
+            text-anchor="middle" letter-spacing="0.14em">DATAIKU</text>
+
+      <!-- Zone: Inference -->
+      <rect x="688" y="108" width="288" height="200" rx="8"
+            fill="rgba(18,33,29,0.02)" stroke="rgba(18,33,29,0.10)" stroke-width="0.8"/>
+      <rect x="744" y="112" width="64" height="12" rx="2" fill="#F0F3F3"/>
+      <text x="776" y="121" fill="rgba(18,33,29,0.40)" font-size="7"
+            font-family="'Space Mono', 'SF Mono', Menlo, Consolas, monospace"
+            text-anchor="middle" letter-spacing="0.14em">INFERENCE</text>
+
+      <!-- Arrows -->
+      <line x1="248" y1="208" x2="368" y2="208" stroke="#4F6C61" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="608" y1="208" x2="728" y2="208" stroke="#12211D" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+
+      <rect x="268" y="192" width="80" height="12" rx="2" fill="#F0F3F3"/>
+      <text x="308" y="202" fill="#4F6C61" font-size="8"
+            font-family="'Space Mono', 'SF Mono', Menlo, Consolas, monospace"
+            text-anchor="middle" letter-spacing="0.06em">LLM MESH</text>
+
+      <rect x="628" y="192" width="80" height="12" rx="2" fill="#F0F3F3"/>
+      <text x="668" y="202" fill="#12211D" font-size="8"
+            font-family="'Space Mono', 'SF Mono', Menlo, Consolas, monospace"
+            text-anchor="middle" letter-spacing="0.06em">OPENAI /V1</text>
+
+      <!-- Node: LLM Mesh -->
+      <rect x="48" y="168" width="200" height="80" rx="6" fill="rgba(79,108,97,0.10)" stroke="#698277" stroke-width="1"/>
+      <rect x="56" y="176" width="36" height="12" rx="2" fill="transparent" stroke="rgba(105,130,119,0.40)" stroke-width="0.8"/>
+      <text x="74" y="185" fill="#698277" font-size="7"
+            font-family="'Space Mono', 'SF Mono', Menlo, Consolas, monospace"
+            text-anchor="middle" letter-spacing="0.08em">MESH</text>
+      <text x="148" y="212" fill="#12211D" font-size="12" font-weight="600"
+            font-family="'Archivo', sans-serif" text-anchor="middle">LLM Mesh</text>
+      <text x="148" y="226" fill="#4F6C61" font-size="8"
+            font-family="'Space Mono', 'SF Mono', Menlo, Consolas, monospace"
+            text-anchor="middle">Prompt Studios &middot; Agents</text>
+      <text x="148" y="238" fill="#4F6C61" font-size="8"
+            font-family="'Space Mono', 'SF Mono', Menlo, Consolas, monospace"
+            text-anchor="middle">Prompt recipes</text>
+
+      <!-- Node: Plugin (focal) -->
+      <rect x="368" y="168" width="240" height="80" rx="6" fill="#00D3E0" stroke="#12211D" stroke-width="1"/>
+      <rect x="376" y="176" width="44" height="12" rx="2" fill="transparent" stroke="rgba(18,33,29,0.50)" stroke-width="0.8"/>
+      <text x="398" y="185" fill="#12211D" font-size="7"
+            font-family="'Space Mono', 'SF Mono', Menlo, Consolas, monospace"
+            text-anchor="middle" letter-spacing="0.08em">PLUGIN</text>
+      <text x="488" y="212" fill="#12211D" font-size="12" font-weight="600"
+            font-family="'Archivo', sans-serif" text-anchor="middle">dss-ollama-mesh</text>
+      <text x="488" y="228" fill="#385749" font-size="8"
+            font-family="'Space Mono', 'SF Mono', Menlo, Consolas, monospace"
+            text-anchor="middle">stream · tools · embed</text>
+
+      <!-- Node: Ollama -->
+      <rect x="728" y="168" width="200" height="80" rx="6" fill="rgba(18,33,29,0.03)" stroke="rgba(18,33,29,0.30)" stroke-width="1"/>
+      <rect x="736" y="176" width="32" height="12" rx="2" fill="transparent" stroke="rgba(18,33,29,0.22)" stroke-width="0.8"/>
+      <text x="752" y="185" fill="#698277" font-size="7"
+            font-family="'Space Mono', 'SF Mono', Menlo, Consolas, monospace"
+            text-anchor="middle" letter-spacing="0.08em">SVC</text>
+      <text x="828" y="212" fill="#12211D" font-size="12" font-weight="600"
+            font-family="'Archivo', sans-serif" text-anchor="middle">Ollama</text>
+      <text x="828" y="228" fill="#4F6C61" font-size="8"
+            font-family="'Space Mono', 'SF Mono', Menlo, Consolas, monospace"
+            text-anchor="middle">localhost:11434/v1</text>
+    </svg>
+  </div>
+</body>
+</html>

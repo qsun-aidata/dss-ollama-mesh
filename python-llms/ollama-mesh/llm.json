@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "label": "Ollama for Dataiku LLM Mesh",
+    "description": "Connect to a local or remote Ollama server via its OpenAI-compatible API",
+    "icon": "fas fa-magic"
+  },
+  "params": [
+    {
+      "name": "base_url",
+      "label": "Ollama Base URL",
+      "type": "STRING",
+      "defaultValue": "http://localhost:11434/v1",
+      "description": "OpenAI-compatible endpoint for Ollama. Use HTTPS for remote endpoints, especially when API Key is set. Use the host IP when DSS and Ollama run on different machines or containers.",
+      "mandatory": true
+    },
+    {
+      "name": "model",
+      "label": "Model",
+      "type": "STRING",
+      "defaultValue": "llama3.1",
+      "description": "Full Ollama model name including tag, e.g. llama3.1:latest or qwen2.5:14b",
+      "mandatory": true
+    },
+    {
+      "name": "api_key",
+      "label": "API Key",
+      "type": "PASSWORD",
+      "defaultValue": "",
+      "description": "Optional bearer token for Ollama Cloud, a reverse proxy, or other secured endpoints. Remote endpoints must use HTTPS when this is set. Leave empty for local Ollama (uses the placeholder key \"ollama\")."
+    },
+    {
+      "name": "max_concurrency",
+      "label": "Max concurrent requests",
+      "type": "INT",
+      "defaultValue": 2,
+      "description": "Maximum concurrent requests for this model. Use 1–2 for large local models (VRAM bound); 8–16 for cloud models.",
+      "minI": 1,
+      "maxI": 64
+    },
+    {
+      "name": "enable_streaming",
+      "label": "Enable streaming",
+      "type": "BOOLEAN",
+      "defaultValue": true,
+      "description": "Stream tokens as they arrive. Disable to fall back to one-shot output when a model omits tool calls during streaming."
+    }
+  ]
+}
