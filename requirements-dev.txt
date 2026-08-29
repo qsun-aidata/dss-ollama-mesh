@@ -1,4 +1,4 @@
 # Development only. What DSS installs is code-env/python/spec/requirements.txt.
 -r code-env/python/spec/requirements.txt
-pytest>=7.0,<9.0
+pytest>=9.1.1,<10.0
 ruff>=0.5,<1.0
