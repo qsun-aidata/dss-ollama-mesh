@@ -9,12 +9,21 @@ updates:
   # code-env/python/spec/requirements.txt and is deliberately a wide floor, so
   # that DSS can resolve a version matching whichever interpreter the code env
   # was built with.
+  #
+  # requirements-dev.txt pulls that file in with `-r`, so both pip ecosystems
+  # below see `openai` and each opened its own PR to raise the floor. Ignoring
+  # it in both keeps the floor where the code env needs it and removes the
+  # duplicate updates.
   - package-ecosystem: pip
     directory: "/"
     schedule:
       interval: monthly
+    ignore:
+      - dependency-name: "openai"
 
   - package-ecosystem: pip
     directory: "/code-env/python/spec"
     schedule:
       interval: monthly
+    ignore:
+      - dependency-name: "openai"
