@@ -1,4 +1,10 @@
 # Development only. What DSS installs is code-env/python/spec/requirements.txt.
 -r code-env/python/spec/requirements.txt
-pytest>=7.0,<9.0
+
+# pytest 9 has no Python 3.8 distribution, and 3.8 is the floor advertised in
+# code-env/python/desc.json. Keep the modern line for interpreters that can run
+# it and hold 3.8 on the last release that supports it.
+pytest>=9.1.1,<10.0; python_version >= "3.9"
+pytest>=7.0,<9.0; python_version < "3.9"
+
 ruff>=0.16.4,<1.0
